@@ -44,7 +44,7 @@ export class AuthService {
         return {
             message:"success",
             payload: {
-                user
+                data:user
             }
         }
     }
@@ -60,7 +60,7 @@ export class AuthService {
         return {
             message: "success",
             payload: {
-                user
+                data: user
             }
         }
     }
@@ -87,7 +87,7 @@ export class AuthService {
         return {
             message:"success",
             payload: {
-                user
+                data:user
             }
         }
     }
