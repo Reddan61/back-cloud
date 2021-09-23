@@ -88,9 +88,12 @@ export class FilesService {
         if(folder && !mongoose.Types.ObjectId.isValid(folder)) {
             throw new BadRequestException()
         }
+        if(!foldername) {
+            throw new BadRequestException()
+        }
 
         const newFolder = {
-            foldername,
+            foldername: String(foldername),
             user: user.userId,
             folder
         }
