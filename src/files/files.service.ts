@@ -34,7 +34,7 @@ export class FilesService {
             folder: folderId as any,
             user: user.userId as any
         }).exec()
-        
+
         const files = await this.fileModel.find({
             folder: folderId as any,
             user: user.userId as any
@@ -70,7 +70,6 @@ export class FilesService {
             if(!folder) {
                 delete newFile.folder
             }
-
             const file = new this.fileModel(newFile)
             await file.save()
             result.push(file)
@@ -167,19 +166,17 @@ export class FilesService {
                     await files[i].deleteOne()
                 }
             }
-
-            folders.forEach(el => {
-                el.deleteOne()
-                if(String(el._id) !== String(folderId)) {
-                    chainDelete(el._id)
+            for(let i = 0; i < folders.length; i++) {
+                folders[i].deleteOne()
+                if(String(folders[i]._id) !== String(folderId)) {
+                    await chainDelete(folders[i]._id)
                 }
-            })
-            
+            }         
         }
 
-        folders.forEach(el => {
-            chainDelete(el)
-        })
+        for(let i = 0; i < folders.length; i++) {
+            await chainDelete(folders[i])
+        }  
 
         return {
             message:"success",
@@ -255,13 +252,13 @@ export class FilesService {
             const newFolder = zip.folder(folders[i].foldername)
             await takeAllFilesFromFolder(folders[i]._id,newFolder)
         }
-
+        
         const content = await zip.generateAsync({type:"nodebuffer"})
         const date = moment().format("DDMMYYYY-HHmmss-SSS")
         const path = `${join(process.cwd(),"/uploads/",date)}.zip`
         await writeFile(path,content)
-
-        response.download(path, () => {
+        
+        response.download(path,(error) => {
             deleteFile(`/uploads/${date}.zip`)
         })
     }
