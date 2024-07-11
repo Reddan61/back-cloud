@@ -55,7 +55,11 @@ export class AuthService {
 
         const access_token = this.jwtService.sign(payload)
         
-        res.cookie(AUTH_COOKIE_NAME, `bearer ${access_token}`, { httpOnly:true })
+        res.cookie(AUTH_COOKIE_NAME, `bearer ${access_token}`, { 
+            httpOnly:true,
+            sameSite: "none",
+            secure: true
+        })
        
         return {
             message: "success",
@@ -68,7 +72,9 @@ export class AuthService {
     async logout(res) {
         res.cookie(AUTH_COOKIE_NAME, "", {
             httpOnly:true,
-            maxAge: 0
+            maxAge: 0,
+            sameSite: "none",
+            secure: true
         })
 
         return {
