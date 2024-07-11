@@ -11,7 +11,6 @@ import { IValidateJWT } from "src/auth/jwt.strategy";
 import { FileDocument, File } from "./schemas/file.schema";
 import { Folder, FolderDocument } from "./schemas/folder.schema";
 import deleteFile from "src/utils/deleteFile";
-import { fstat } from "fs";
 import { DownloadDto } from "./dto/download.dto";
 
 

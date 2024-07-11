@@ -1,11 +1,11 @@
 import { BadRequestException, HttpException, HttpStatus, Injectable, Response } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import * as bcrypt from "bcrypt"
-import { UsersModule } from 'src/users/users.module';
 import { UsersService } from "src/users/users.service";
 import { RegisterDto } from "./dto/register.dto";
 import { IValidateJWT } from "./jwt.strategy";
 
+const AUTH_COOKIE_NAME = "Authorization";
 
 @Injectable()
 export class AuthService {
@@ -55,7 +55,7 @@ export class AuthService {
 
         const access_token = this.jwtService.sign(payload)
         
-        res.cookie('token', access_token, {httpOnly:true})
+        res.cookie(AUTH_COOKIE_NAME, `bearer ${access_token}`, { httpOnly:true })
        
         return {
             message: "success",
@@ -66,7 +66,7 @@ export class AuthService {
     }
 
     async logout(res) {
-        res.cookie('token', "", {
+        res.cookie(AUTH_COOKIE_NAME, "", {
             httpOnly:true,
             maxAge: 0
         })
